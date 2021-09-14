@@ -20,9 +20,20 @@ impl Rover {
         for c in commands {
             if c == "R" {
                 direction = turn_right(direction);
+            } else if c == "L" {
+                direction = turn_left(direction);
             }
         }
         String::from(format!("0:0:{:?}", direction))
+    }
+}
+
+fn turn_left(direction: Direction) -> Direction {
+    match direction {
+        Direction::N => { Direction::W }
+        Direction::E => { Direction::N }
+        Direction::S => { Direction::E }
+        Direction::W => { Direction::S }
     }
 }
 
@@ -52,6 +63,16 @@ mod tests {
     #[test_case("RRRR",  "0:0:N")]
     #[test_case("RRRRR",  "0:0:E")]
     fn turn_right(input: &str, position: &str) {
+        let mut rover: Rover = Rover::new();
+        assert_eq!(rover.execute(input), String::from(position));
+    }
+
+    #[test_case("L",  "0:0:W")]
+    #[test_case("LL",  "0:0:S")]
+    #[test_case("LLL",  "0:0:E")]
+    #[test_case("LLLL",  "0:0:N")]
+    #[test_case("LLLLL",  "0:0:W")]
+    fn turn_left(input: &str, position: &str) {
         let mut rover: Rover = Rover::new();
         assert_eq!(rover.execute(input), String::from(position));
     }
